@@ -1,0 +1,275 @@
+package com.bridgelabz.fundoonotes.usercontroller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.bridgelabz.fundoonotes.usermodels.User;
+import com.bridgelabz.fundoonotes.userservice.UserServiceImpl;
+
+@Controller
+@RequestMapping("/user/")
+public class UserController {
+	@Autowired
+	private UserServiceImpl userService;
+
+	@Autowired
+	private Validator validator;
+
+	@InitBinder
+	private void initBinder(WebDataBinder binder) {
+		binder.setValidator(validator);
+	}
+
+	@PostMapping(value = "/register")
+	public ResponseEntity<?> register(@Validated @RequestBody User user, BindingResult bindingResult,
+			HttpServletRequest request) {
+		if (bindingResult.hasErrors()) {
+			return new ResponseEntity<String>("Please enter valid details", HttpStatus.BAD_REQUEST);
+		}
+		boolean result = userService.register(user, request);
+		if (result) 
+		{
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+		return null;
+	}
+
+
+	@PostMapping(value = "/login")
+	public ResponseEntity<?> userLogin(@RequestBody User user, HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			String token = userService.userLogin(user, request, response);
+			if (token != null)
+				response.setHeader("token", token);
+			return new ResponseEntity<Void>(HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+
+	@GetMapping(value = "/activationstatus/{token:.+}")
+	public ResponseEntity<String> activateUser(@PathVariable String token, HttpServletRequest request) {
+		User user = userService.userActivation(token, request);
+		if (user != null) {
+			return new ResponseEntity<String>("Activated User successfully", HttpStatus.FOUND);
+		} else {
+			return new ResponseEntity<String>(" Please enter valid email address",HttpStatus.NOT_FOUND);
+		}
+	}
+
+
+	@PostMapping(value = "/update")
+	public ResponseEntity<String> update(@RequestHeader("token") String token, @RequestBody User user,
+			HttpServletRequest request) {
+		try {
+			if (userService.updateUser(token, user, request) != null)
+				return new ResponseEntity<String>("Updated User Succesfully ", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("Not Updated ", HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<String>("Please enter valid details", HttpStatus.NOT_FOUND);
+	}
+
+
+
+
+	@DeleteMapping(value = "/delete")
+	public ResponseEntity<String> deleteNote(@RequestHeader("token") String token, HttpServletRequest request) {
+		try {
+			if (userService.delete(token, request) != false) {
+				return new ResponseEntity<String>("Deleted User Succesfully ", HttpStatus.FOUND);
+			} else
+				return new ResponseEntity<String>("not deleted", HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return new ResponseEntity<String>("Please enter valid details", HttpStatus.NOT_FOUND);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	//
+	//	@PostMapping(value = "/forgotpassword")
+	//	public ResponseEntity<?> forgotPassword(@RequestParam("emailId") String emailId, HttpServletRequest request) {
+	//
+	//		boolean user = userService.forgotPassword(emailId, request);
+	//		if (user == false) {
+	//			return new ResponseEntity<User>(HttpStatus.FOUND);
+	//		} else {
+	//			return new ResponseEntity<String>("Email incorrect. Please enter valid email address present in database",
+	//					HttpStatus.NOT_FOUND);
+	//		}
+	//	}
+	//
+	//	@PutMapping(value = "/resetpassword/{token:.+}")
+	//	public ResponseEntity<?> resetPassword(@RequestBody User user, @PathVariable("token") String token,
+	//			HttpServletRequest request) {
+	//		User user1 = userService.resetPassword(user, token, request);
+	//		if (user1 != null) {
+	//			return new ResponseEntity<String>("password is Succeessfully updated", HttpStatus.FOUND);
+	//
+	//		} else {
+	//			return new ResponseEntity<String>("Dinied In Reseting Password ", HttpStatus.NOT_FOUND);
+	//		}
+	//	}
+
+}

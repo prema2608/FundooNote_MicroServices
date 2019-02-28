@@ -1,0 +1,16 @@
+package com.bridgelabz.fundoonotes.noteservice;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.bridgelabz.fundoonotes.notemodels.Note;
+
+public class NoteServiceImpl 
+{
+
+	public boolean createNote(String token, Note note, HttpServletRequest request) {
+		
+		return false;
+	}
+	
+
+}

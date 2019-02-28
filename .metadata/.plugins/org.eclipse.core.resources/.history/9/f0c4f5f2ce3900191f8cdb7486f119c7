@@ -1,0 +1,55 @@
+package com.bridgelabz.fundoonotes.notecontroller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.bridgelabz.fundoonotes.notemodels.Note;
+import com.bridgelabz.fundoonotes.noteservice.NoteServiceImpl;
+
+
+public class NoteController 
+{
+
+	@Controller
+	@RequestMapping("/note/")
+	public class UserController {
+		@Autowired
+		private NoteServiceImpl noteService;
+
+		@Autowired
+		private Validator validator;
+
+		@InitBinder
+		private void initBinder(WebDataBinder binder) {
+			binder.setValidator(validator);
+		}
+
+		@PostMapping(value = "/createnote")
+		public ResponseEntity<?> createnote(@Validated @RequestBody Note note, BindingResult bindingResult,
+				HttpServletRequest request) {
+			if (bindingResult.hasErrors()) {
+				return new ResponseEntity<String>("Please enter valid details", HttpStatus.BAD_REQUEST);
+			}
+			boolean result = noteService.createNote(note, request);
+			if (result) 
+			{
+				return new ResponseEntity<Void>(HttpStatus.OK);
+			}
+			return null;
+		}
+
+	}
+
+}

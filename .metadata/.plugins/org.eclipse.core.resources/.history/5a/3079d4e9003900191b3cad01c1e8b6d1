@@ -1,0 +1,26 @@
+package com.bridgelabz.userservice;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.bridgelabz.usermodels.User;
+
+public interface UserServiceInf {
+
+	User register(User user, HttpServletRequest request);
+
+	User loginUser(User user, HttpServletResponse response);
+
+	User updateUser(String token, User user);
+
+	User deleteUser(String token);
+
+	User activateUser(String token);
+
+	boolean forgotPassword(String emailId, HttpServletRequest request);
+
+	User resetPassword(User user, String token);
+    
+	
+}
+

@@ -1,0 +1,24 @@
+package com.bridgelabz.fundoonotes.userservice;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.bridgelabz.fundoonotes.usermodels.User;
+
+public interface UserServiceInf {
+
+	boolean register(User user, HttpServletRequest request);
+
+	String userLogin(User user, HttpServletRequest request, HttpServletResponse response);
+
+	User userActivation(String token, HttpServletRequest request);
+	
+	User updateUser(String token, User user, HttpServletRequest request);
+
+	boolean deleteUser(String token, HttpServletRequest request);
+
+	boolean forgotPassword(User user, HttpServletRequest request);	
+
+	User resetPassword(User user, String token, HttpServletRequest request);
+}
+

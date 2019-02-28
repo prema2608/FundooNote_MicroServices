@@ -1,0 +1,46 @@
+package com.bridgelabz.fundoonotes.notecontroller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.bridgelabz.fundoonotes.notemodels.Note;
+import com.bridgelabz.fundoonotes.noteservice.NoteServiceImpl;
+
+
+public class NoteController 
+{
+
+	@Controller
+	@RequestMapping("/note/")
+	public class UserController {
+		@Autowired
+		private NoteServiceImpl noteService;
+
+		
+		@PostMapping(value = "/createnote")
+		public ResponseEntity<?> createNote(@RequestHeader("token") String token,@RequestBody Note note, HttpServletRequest request) 
+		{
+			try {
+			
+				if (noteService.createNote(token,note, request))
+					return new ResponseEntity<Void>(HttpStatus.OK);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			}
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+		
+
+	}
+
+
+}

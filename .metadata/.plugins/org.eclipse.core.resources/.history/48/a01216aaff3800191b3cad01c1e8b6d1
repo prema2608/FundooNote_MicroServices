@@ -1,0 +1,20 @@
+package com.bridgelabz.userdao;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import com.bridgelabz.usermodels.User;
+
+@Repository
+public interface UserDetailsRepository extends JpaRepository<User, Integer> {
+	
+	User findById(int id);
+	
+	Optional<User> findByEmailId(String emailId);
+	
+
+	
+	
+
+
+}

@@ -1,0 +1,8 @@
+package com.bridgelabz.fundoonotes.notedao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface NoteDetailsRepository extends JpaRepository<User, Integer>
+{
+
+}

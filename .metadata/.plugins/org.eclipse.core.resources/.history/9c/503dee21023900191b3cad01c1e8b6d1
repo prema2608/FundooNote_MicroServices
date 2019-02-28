@@ -1,0 +1,10 @@
+package com.bridgelabz.userutility;
+
+public interface JWTGenerator 
+{
+	String generateToken(String id);
+
+	int verifyToken(String token);
+}
+
+
